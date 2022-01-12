@@ -1,0 +1,57 @@
+html{
+	font-size: 1rem;
+	color: #1b1b1b;
+	line-height: 1.4;
+	letter-spacing: -0.4px;
+}
+body{
+	-webkit-font-smoothing: antialiased;
+	scrollbar-face-color: #e0e0e0;
+	scrollbar-track-color: #fff;
+	scrollbar-arrow-color: none;
+	scrollbar-highlight-color: #e0e0e0;
+	scrollbar-3dlight-color: none;
+	scrollbar-shadow-color: #e0e0e0;
+	scrollbar-darkshadow-color: none;
+}
+.wrap{
+	height: inherit;
+}
+/* float 해제를 위한 css code*/
+.clearfix:after{
+	content:'';
+    display:block;
+    clear:both;
+}
+
+/* flex관련 css code*/
+.flex{
+	display: flex;
+}
+
+/* input 관련 기본 css*/
+.input_basic{
+    padding: 20px;
+    width: 100%;
+    height: 52px;
+    border-radius: 12px;
+	border: 0;
+	background-color: #000000;
+	color: #ffffff;
+}
+.input_basic::placeholder{
+	color: #ffffff;
+}
+
+/* btn 관련 기본 css*/
+.btn_basic{
+    width: 100px;
+}
+
+/* color관련 css*/
+.bg_black{
+	background-color: #000000;
+}
+.c_white{
+	color: #ffffff;
+}

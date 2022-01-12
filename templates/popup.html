@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+          crossorigin="anonymous">
+
+    <!-- JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+
+
+
+
+    <title>popup-all</title>
+
+    <style>
+        button {
+          background-color: #fcce89;
+          padding: 5px 10px;
+          border-radius: 4px;
+          cursor: pointer;
+        }
+        .modal {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+        .modal .bg {
+          width: 100%;
+          height: 100%;
+          background-color: rgba(0, 0, 0, 0.6);
+        }
+        .modalBox {
+          position: absolute;
+          background-color: #fff;
+          width: 400px;
+          padding: 15px;
+        }
+        .modalBox >  button {
+          display: block;
+          width: 80px;
+          margin: 0 auto;
+        }
+        .hidden {
+          display: none;
+        }
+       .form_control {
+           display: block;
+           width: 100%;
+           padding: 0.375rem 0.75rem;
+           font-size: 1rem;
+           line-height: 1.5;
+           color: #495057;
+           background-color: #fff;
+       }
+       .form_desc {
+           display: block;
+           width: 100%;
+           height: 100px;
+           padding: 0.375rem 0.75rem;
+           font-size: 1rem;
+           line-height: 1.5;
+           color: #495057;
+           background-color: #fff;
+       }
+       .btn-delete {
+           position: absolute;
+           right: 0;
+           top: 0;
+           margin-bottom: 10px;
+       }
+       .btn_container {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            align-content: stretch;
+        }
+       .modal_container {
+           margin-top: 30px;
+       }
+       p {
+           width: 100%;
+           height: 50px;
+           border: black 1px solid;
+       }
+    </style>
+</head>
+<body>
+     <!-- 작성   -->
+    <button class="openBtn open_write" type="button">작성</button>
+    <div class="modal hidden" id="write-modal">
+        <div class="bg"></div>
+        <div class="modalBox">
+            <div class="btn-delete">
+                <button class="delete close_write" type="button">X</button>
+            </div>
+            <div class="modal_container">
+                <span>제목</span>
+                <input id="write_title" type="text" class="form_control">
+                <span>일시</span>
+                <input id="write_date" type="text" class="form_control">
+                <span>장소</span>
+                <input id="write_place" type="text" class="form_control">
+                <span>인원</span>
+                <input id="write_attend" type="text" class="form_control">
+                <span>설명</span>
+                <textarea id="write_content" type="text" class="form_desc"></textarea>
+             </div>
+            <button onclick="submit()" class="closeBtn" >작성</button>
+        </div>
+    </div>
+
+     <!-- view _ 수정   -->
+    <button class="openBtn open_fix">수정 삭제</button>
+    <div class="modal hidden" id="delete_modal">
+        <div class="bg"></div>
+        <div class="modalBox">
+            <div class="btn-delete">
+                <button class="delete close_fix">X</button>
+            </div>
+            <div class="modal_container">
+                <span>제목</span>
+                <input type="text" class="form_control">
+                <span>일시</span>
+                <input type="text" class="form_control">
+                <span>장소</span>
+                <input type="text" class="form_control">
+                <span>인원</span>
+                <input type="text" class="form_control">
+                <span>설명</span>
+                <textarea type="text" class="form_desc"></textarea>
+            </div>
+            <footer class="btn_container">
+                <button class="closeBtn">수정</button>
+                <button class="deleteBtn">삭제</button>
+            </footer>
+        </div>
+    </div>
+
+     <!-- view _ 참가   -->
+     <button class="openBtn open_view">참가자</button>
+    <div class="modal hidden" id="view_modal">
+        <div class="bg"></div>
+        <div class="modalBox">
+
+            <div class="btn-delete">
+                <button class="delete close_view">X</button>
+            </div>
+            <div class="modal_container">
+                <span>제목</span>
+                <p>내용</p>
+                <span>일시</span>
+                <p>내용</p>
+                <span>장소</span>
+                <p>내용</p>
+                <span>인원</span>
+                <p>내용</p>
+            </div>
+            <footer class="btn_container">
+                <button>참가신청</button>
+                <button>참가취소</button>
+            </footer>
+        </div>
+    </div>
+     <script>
+         /* ID, PW값 변수 지정 */
+        var title = $('#write_title').val();
+        var date = $('#write_date').val();
+        var place = $('#write_place').val();
+        var attendance = $('#write_attend').val();
+        var content = $('#write_content').val();
+
+        function submit(){
+            /* ID, PW ajax type:POST */
+            $.ajax({
+                type: "POST",
+                url: "/memo",
+                data: {'title_give':title, 'date_give':date, 'place_give':place, 'attendance_give':attendance, 'content_give':content},
+                success: function (response) {
+                    if (response['result'] == 'success') {
+                        alert(response['msg']);
+                        window.location.href = "/list"
+                    } else {
+                        alert(response['msg'])
+                    }
+                }
+            })
+        }
+
+        $('.open_write').click(function (){
+            $("#write-modal").removeClass("hidden")
+        });
+        $('.close_write').click(function (){
+            $("#write-modal").addClass("hidden")
+        });
+        $('.open_fix').click(function (){
+            $("#delete_modal").removeClass("hidden")
+        });
+        $('.close_fix').click(function (){
+            $("#delete_modal").addClass("hidden")
+        });
+         $('.open_view').click(function (){
+            $("#view_modal").removeClass("hidden")
+        });
+        $('.close_view').click(function (){
+            $("#view_modal").addClass("hidden")
+        });
+    </script>
+</body>
+</html>

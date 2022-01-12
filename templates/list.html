@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+
+    <!-- CSS -->
+    <link rel="stylesheet"  href="{{url_for('static', filename='css/default.css')}}"/>
+
+    <!-- JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <!-- font : google -->
+    <link href="https://fonts.googleapis.com/css?family=Stylish&display=swap" rel="stylesheet">
+
+    <title>J-GATI LIST PAGE</title>
+</head>
+<body>
+    <div class="wrap">
+        <div class="header">
+            <div class="header_logo">
+                <h2 class="logo">J-GATI</h2>
+            </div>
+            <div class="bar_menu">
+                <button class="btn_basic" type="button">Logout</button>
+                <button class="btn_basic open_write" type="button">RECRUIT</button>
+                <span class="user_deco">님</span>
+                <p id="user_current" class="current_user">test</p>
+            </div>
+        </div>
+        <div class="box_list">
+            {% for write_info in contents %}
+                <div class="list_item" onclick="open_view(this)">
+                    <div class="item_cont">
+                        <p class="item_text item_title">{{ write_info.title }}</p>
+                    </div>
+                    <div class="item_cont">
+                        <p class="item_text flex3 item_date">{{ write_info.date }}</p>
+                        <p class="item_text flex1 item_attendance">{{ write_info.attendance }}</p>
+                    </div>
+                    <div class="item_cont">
+                        <p class="item_text item_place">{{ write_info.place }}</p>
+                    </div>
+                    <div class="item_cont">
+                        <p class="item_comment item_comment">{{ write_info.content }}</p>
+                    </div>
+                    <p class="hidden item_id">{{ write_info.writeID }}</p>
+                    <p class="hidden item_like">{{ write_info.count }}</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- 작성 팝업 -->
+    <div class="modal hidden" id="write-modal">
+        <div class="modal_bg"></div>
+        <div class="modalBox">
+            <div class="btn_delete">
+                <button class="delete close_write" onclick="close_pop(this)" type="button">X</button>
+            </div>
+            <div class="modal_container">
+                <span>제목</span>
+                <input id="write_title" type="text" class="form_control">
+                <span>일시</span>
+                <input id="write_date" type="text" class="form_control">
+                <span>장소</span>
+                <input id="write_place" type="text" class="form_control">
+                <span>인원</span>
+                <input id="write_attend" type="text" class="form_control">
+                <span>설명</span>
+                <textarea id="write_content" type="text" class="form_desc"></textarea>
+                <p id="write_id" class="hidden">test</p>
+             </div>
+            <button onclick="submit()" class="closeBtn" >작성</button>
+        </div>
+    </div>
+
+    <!-- 수정/삭제 팝업 -->
+    <div class="modal hidden" id="fix-modal">
+        <div class="modal_bg"></div>
+        <div class="modalBox">
+            <div class="btn_delete">
+                <button class="delete close_fix" onclick="close_pop(this)" type="button">X</button>
+            </div>
+            <div class="modal_container">
+                <span>제목</span>
+                <input id="fix_title" type="text" class="form_control" value="">
+                <span>일시</span>
+                <input id="fix_date" type="text" class="form_control" value="">
+                <span>장소</span>
+                <input id="fix_place" type="text" class="form_control" value="">
+                <span>인원</span>
+                <input id="fix_attend" type="text" class="form_control" value="">
+                <span>설명</span>
+                <textarea id="fix_content" type="text" class="form_desc"></textarea>
+                <p id="fix_id" class="hidden"></p>
+             </div>
+            <footer class="btn_container hidden">
+                <button class="btn_basic" onclick="fix_card()" type="button">수정</button>
+                <button class="btn_basic" onclick="delete_card()" type="button">삭제</button>
+            </footer>
+        </div>
+    </div>
+
+    <!-- 참가 팝업 -->
+    <div class="modal hidden" id="view_modal">
+        <div class="modal_bg"></div>
+        <div class="modalBox">
+            <div class="btn_delete">
+                <button class="delete close_view" onclick="close_pop(this)" type="button">X</button>
+            </div>
+            <div class="modal_container">
+                <span>제목</span>
+                <p id="modal_title">내용</p>
+                <span>일시</span>
+                <p id="modal_date">내용</p>
+                <span>장소</span>
+                <p id="modal_place">내용</p>
+                <span>인원</span>
+                <p id="modal_attendance">내용</p>
+                <span>설명</span>
+                <p id="modal_comment">내용</p>
+            </div>
+            <footer class="btn_container">
+                <button class="btn_basic" onclick="tj_card()" type="button">참가신청</button>
+                <button class="btn_basic" onclick="" type="button">참가취소</button>
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        /* 전역변수 설정 : 해당 변수들은 여러 함수에 공통적으로 사용될 목적성이 존재하며, 중복 코드들을 간편하게 하기위해 사용 */
+        var data_title;
+        var data_date;
+        var data_attendance;
+        var data_place;
+        var data_comment;
+        var data_id;
+        var data_like;
+
+
+        /* 작성팝업에서 작성한 데이터를 app.py에 POST */
+        /* 참가관련 데이터는 기본값으로 1로 정하는 정책을 세웠기 때문에 app.py에서 따로 지정*/
+        /* id값의 경우, 현재 고정으로 데이터 삽입한 상황. 로그인쪽 token과 관련하여 연동작업 필요*/
+        function submit(){
+            /* 모집 데이터 변수 선언 */
+            let title = $('#write_title').val();
+            let date = $('#write_date').val();
+            let place = $('#write_place').val();
+            let attendance = $('#write_attend').val();
+            let content = $('#write_content').val();
+            let user_id = $('#write_id').text();
+
+            /* 해당 데이터들을 /memo 쪽으로 POST */
+            $.ajax({
+                type: "POST",
+                url: "/memo",
+                data: {'title_give':title, 'date_give':date, 'place_give':place, 'attendance_give':attendance, 'content_give':content, 'id_give':user_id},
+                success: function (response) {
+                    if (response['result'] == 'success') {
+                        alert(response['msg']);
+                        window.location.reload()
+                    } else {
+                        alert(response['msg'])
+                    }
+                }
+            })
+        }
+
+        /* 팝업 공통 CLOSE 관련 script */
+        function close_pop(e){
+            $(e).parents('.modal').addClass("hidden")
+        }
+
+        /* 작성카드 팝업 OPEN script */
+        $('.open_write').click(function (){
+            $("#write-modal").removeClass("hidden")
+        });
+
+
+        /* 해당카드 정보 팝업 노출관련 script */
+        function open_view(e){
+            /* this를 매개변수 e로 받아 하위 자식요소를 find한 후에 해당 카드 값들의 위치 및 값들을 변수선언*/
+            let title = $(e).find('.item_title');
+            let place = $(e).find('.item_place');
+            let attendance = $(e).find('.item_attendance');
+            let date = $(e).find('.item_date');
+            let comment = $(e).find('.item_comment');
+            let write_id = $(e).find('.item_id').text();
+            let like = $(e).find('.item_like').text();
+
+            /* 현재접속ID */
+            /* id값의 경우, 현재 고정으로 데이터 삽입한 상황. 로그인쪽 token과 관련하여 연동작업 필요*/
+            let current_id = $('#user_current').text();
+
+            /* 전역변수에 해당값들을 저장 */
+            data_title = title.text();
+            data_date = date.text();
+            data_attendance = attendance.text();
+            data_place = place.text();
+            data_comment = comment.text();
+            data_id = write_id;
+            data_like = like;
+
+            /* 카드에 숨겨있는 작성자 id와 현재 접속 중인 id 값을 비교하여 같으면 수정팝업, 틀리면 참가팝업 */
+            /* id값의 경우, 현재 고정으로 데이터 삽입한 상황. 로그인쪽 token과 관련하여 연동작업 필요*/
+            if (write_id == current_id){
+                /* 수정팝업 관련 script */
+                /* 선택한 카드의 text를 해당 팝업에 삽입 */
+                $('#fix_title').val(title.text());
+                $('#fix_date').val(date.text());
+                $('#fix_place').val(place.text());
+                $('#fix_attend').val(attendance.text());
+                $('#fix_content').text(comment.text());
+                $('#fix_id').text(write_id);
+
+                /* 팝업 open */
+                $("#fix-modal").removeClass("hidden")
+            }else{
+                /*참가팝업 관련 script*/
+                /* 선택한 카드의 text를 해당 팝업에 삽입 */
+                $("#modal_title").text(title.text());
+                $("#modal_place").text(place.text());
+                $("#modal_attendance").text(attendance.text());
+                $("#modal_date").text(date.text());
+                $("#modal_comment").text(comment.text());
+
+                /* 팝업 open */
+                $("#view_modal").removeClass("hidden")
+            }
+
+            /* 아이디 비교확인관련 log */
+            console.log("작성 id = " + write_id);
+            console.log("현재 접속 id = " + current_id);
+        };
+
+
+        /* 카드삭제관련 script */
+        function delete_card() {
+            /* 전역변수에 설정된 데이터와 일치하기에 전역변수 삽입 */
+            /* 해당 데이터가 필요한 이유는, 현재 정책상 데이터선택을 위해 모든 데이터가 일치해야 기능하도록 설정 */
+            /* 제목, 일시, 장소, 인원, 설명, id, count가 모두 필요하므로 data에 담아 전송 */
+            $.ajax({
+                type: 'POST',
+                url: '/memo/delete',
+                data: {
+                    'title_give':data_title,
+                    'date_give':data_date,
+                    'place_give':data_place,
+                    'attendance_give':data_attendance,
+                    'content_give':data_comment,
+                    'id_give':data_id,
+                    'count_give': data_like
+                },
+                success: function (response) {
+                    alert(response['msg']);
+                    window.location.reload()
+                }
+            });
+        }
+
+
+        /* 카드수정관련 script */
+        function fix_card() {
+            /* 수정팝업에서 수정한 데이터 변수선언 및 값 지정 */
+            let fix_title = $('#fix_title').val();
+            let fix_date = $('#fix_date').val();
+            let fix_place = $('#fix_place').val();
+            let fix_attend = $('#fix_attend').val();
+            let fix_content = $('#fix_content').val();
+
+            /* 선택한 카드의 원본 데이터 ==> 전역변수에 이미 설정. ex)data_title, data_date....*/
+            /* 원본 데이터의 경우, 해당카드가 맞는지에 대한 filter 조건을 위해 필요 */
+            $.ajax({
+                type: 'POST',
+                url: '/memo/fix',
+                data: {
+                    'title_give':data_title,
+                    'date_give':data_date,
+                    'place_give':data_place,
+                    'attendance_give':data_attendance,
+                    'content_give':data_comment,
+                    'id_give':data_id,
+                    'count_give': data_like,
+                    'fix_title_give':fix_title,
+                    'fix_date_give':fix_date,
+                    'fix_attendance_give':fix_place,
+                    'fix_place_give':fix_attend,
+                    'fix_content_give':fix_content
+                },
+                success: function (response) {
+                    alert(response['msg']);
+                    window.location.reload()
+                }
+            });
+        }
+
+        /* 참가신청관련 script */
+        function tj_card() {
+            $.ajax({
+                type: 'POST',
+                url: '/memo/tj',
+                data: {
+                    'title_give':data_title,
+                    'date_give':data_date,
+                    'place_give':data_place,
+                    'attendance_give':data_attendance,
+                    'content_give':data_comment,
+                    'id_give':data_id,
+                    'like_give': data_like,
+                },
+                success: function (response) {
+                    alert(response['msg']);
+                    window.location.reload()
+                }
+            });
+        }
+    </script>
+</body>
+</html>

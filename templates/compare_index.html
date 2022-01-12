@@ -1,0 +1,86 @@
+<!Doctype html>
+<html lang="ko">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+
+    <!-- CSS -->
+    <link rel="stylesheet"  href="{{url_for('static', filename='css/default.css')}}"/>
+
+    <!-- JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+
+    <!-- font : google -->
+    <link href="https://fonts.googleapis.com/css?family=Stylish&display=swap" rel="stylesheet">
+
+    <title>J-GATI MAIN PAGE</title>
+</head>
+<body>
+    <div class="wrap">
+        <div class="main_login clearfix">
+            <!-- box_login => float -->
+            <div class="box_login">
+                <!-- flex형식 -->
+                <h3 class="box_loginLogo">J-GATI</h3>
+                <div class="box_loginInput">
+                    <input id="login_id" class="input_basic bg_black c_white" type="text" placeholder="아이디를 입력해주세요">
+                    <input id="login_pwd" class="input_basic bg_black c_white" type="password" placeholder="비밀번호를 입력해주세요">
+
+                    <!-- login관련 script --------------- start ----------------->
+                    <script>
+                        function login(){
+
+                            /* ID, PW값 변수 지정 */
+                            let id = $('#login_id').val();
+                            let pw = $('#login_pwd').val();
+
+                            /* ID, PW 미입력시 관련 alert */
+                            if(id==''){
+                                alert("아이디를 입력해주세요")
+                            }else if (pw==''){
+                                alert("비밀번호를 입력해주세요")
+                            }
+
+                            /* ID, PW ajax type:POST */
+                            $.ajax({
+                                type: "POST",
+                                url: "/api/login",
+                                data: {'id':id, 'pw':pw},
+                                success: function (response) {
+                                    if (response['result'] == 'success') {
+                                        console.log("콘솔")
+                                        $.cookie('mytoken', response['token'], {path: '/'});
+                                        alert(response['s_msg']);
+                                        window.location.href = "/list"
+                                    } else {
+                                        alert(response['f_msg'])
+                                    }
+                                }
+                            })
+                        }                    
+                    </script>
+                    <!------------------------------------ end ----------------->
+
+                    <button class="btn_basic" onclick="login()" type="button">로그인</button>
+                </div>
+
+                <!-- 회원가입관련 script --------------- start ----------------->
+                <!-- redener_place로 페이지 이동 // 경로 : /join -->
+                <script>
+                    function page(){
+                        window.location.href = "/joinGet"
+                    }
+                </script>
+                <!-------------------------------------- end ----------------->
+
+                <div class="box_loginJoin">
+                    <button class="btn_basic" onclick="page()" type="button">회원가입</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

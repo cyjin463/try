@@ -1,0 +1,294 @@
+/*----- index.html : 로그인 ------------------------ START ------------------------------------------------*/
+.main_login{
+    margin: 0 auto;
+    width: 100%;
+    height: 100%;
+    background-image: url("/static/img/test.gif");
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.box_login {
+    float: right;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 30%;
+    height: 100%;
+    overflow: hidden;
+    background: #ffffff;
+    opacity: 0.8;
+    border-radius: 10px 0 0 10px;
+}
+.box_loginLogo{
+    margin-bottom: 140px;
+    font-size: 50px;
+    font-weight: bold;
+}
+.box_loginInput {
+    margin-bottom: 100px;
+    display: flex;
+    width: 300px;
+    height: 200px;
+    flex-direction: column;
+    align-content: flex-end;
+    align-items: center;
+    justify-content: space-between;
+}
+.box_loginJoin {
+    padding-top: 10px;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    border-top: 1px solid;
+}
+/*----- index.html : 로그인 ------------------------ END ------------------------------------------------*/
+
+/*----- join.html : 회원가입 ------------------------ START ------------------------------------------------*/
+.main_join{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    width: 100%;
+    height: 100%;
+    background-image: url("/static/img/test.gif");
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+.box_join{
+    display: flex;
+    flex-direction: column;
+    align-content: space-around;
+    justify-content: center;
+    align-items: center;
+    padding: 120px 0 20px;
+    width: 900px;
+    height: 600px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    opacity: 0.8;
+}
+.box_join h2 {
+    flex-grow: 3;
+}
+.box_joinInput {
+    display: flex;
+    align-content: center;
+    flex-direction: column;
+    justify-content: space-around;
+    flex-grow: 1;
+    width: 50%;
+    height: 260px;
+}
+.joinInput_id{
+    position: relative;
+    display: flex;
+}
+.joinInput_id .btn_basic{
+    position: absolute;
+    right: 0;
+    height: 100%;
+    border-radius: 0 10px 10px 0;
+    background-color: #818181;
+    border: 0;
+    color: #ffffff;
+}
+.box_joinBtn{
+    flex-grow: 1;
+}
+/*----- join.html : 회원가입 ------------------------ END ------------------------------------------------*/
+
+/*----- list.html : 리스트 페이지 ------------------------ START ------------------------------------------------*/
+.header {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 50px 10px;
+    min-width: 1080px;
+    height: 120px;
+    border-bottom: 1px solid #a4a4a4;
+}
+.header_logo{
+    display: flex;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+.header_logo .logo{
+    text-align: center;
+    font-size: 48px;
+}
+.bar_menu{
+    display: flex;
+    flex-direction: row-reverse;
+    width: 100%;
+}
+.bar_menu button+button{
+    margin-right: 10px;
+}
+.current_user{
+    margin-right: 5px;
+}
+.user_deco{
+    margin-right: 30px;
+}
+.box_list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    margin: 10px auto;
+    width: 1000px;
+    height: 642px;
+    border: 1px solid #a4a4a4;
+    border-radius: 12px;
+    overflow-y: scroll;
+    scroll-snap-type: y mandatory;
+}
+.box_list::-webkit-scrollbar {
+    width: 10px;
+}
+.box_list::-webkit-scrollbar-thumb {
+    background-color: #dddddd;
+    border-radius: 0 12px 12px 0;
+    outline: 0px;
+}
+.list_item {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 0;
+    margin: 10px 0px 10px 15px;
+    width: 300px;
+    height: 300px;
+    border: 1px solid #a4a4a4;
+    border-radius: 12px;
+    cursor: pointer;
+}
+.item_cont {
+    display: flex;
+    justify-content:center;
+    align-items:center;
+    width: 280px;
+    height: 32px;
+    margin: auto;
+}
+.item_cont:nth-last-child(3){
+    height: 120px;
+}
+.item_text {
+    padding: 0px 20px;
+    width: 100%;
+    height: 100%;
+    border: 1px solid #a4a4a4;
+    border-radius: 12px;
+    text-align: center;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    line-height: 32px;
+}
+.item_comment{
+    padding: 10px 20px;
+    width: 100%;
+    height: 100%;
+    border: 1px solid #a4a4a4;
+    border-radius: 12px;
+    text-align: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: break-word;
+    white-space: normal;
+    word-wrap: break-word;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
+.flex3{
+    flex-grow: 3;
+    width: auto;
+}
+.flex1{
+    flex-grow: 1;
+    width: auto;
+}
+/*----- list.html : 리스트 페이지 ------------------------ END ------------------------------------------------*/
+
+/*----- popup : 리스트 페이지 팝업 ------------------------ START ------------------------------------------------*/
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.modal_bg {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+}
+.modalBox {
+    position: absolute;
+    background-color: #fff;
+    width: 400px;
+    padding: 15px;
+    border: 1px solid #a4a4a4;
+    border-radius: 12px;
+}
+.modalBox >  button {
+    display: block;
+    width: 80px;
+    margin: 0 auto;
+}
+.hidden {
+    display: none;
+}
+.form_control {
+   display: block;
+   width: 100%;
+   padding: 0.375rem 0.75rem;
+   font-size: 1rem;
+   line-height: 1.5;
+   color: #495057;
+   background-color: #fff;
+}
+.form_desc {
+   display: block;
+   width: 100%;
+   height: 100px;
+   padding: 0.375rem 0.75rem;
+   font-size: 1rem;
+   line-height: 1.5;
+   color: #495057;
+   background-color: #fff;
+}
+.btn_delete {
+   position: absolute;
+   right: 0;
+   top: 0;
+   margin-bottom: 10px;
+}
+.btn_container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    align-content: stretch;
+}
+.modal_container {
+   margin-top: 30px;
+}
+.modal_container p {
+   width: 100%;
+   height: 50px;
+   border: black 1px solid;
+}
+/*----- popup : 리스트 페이지 팝업 ------------------------ END ------------------------------------------------*/

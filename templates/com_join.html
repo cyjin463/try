@@ -1,0 +1,86 @@
+<!Doctype html>
+<html lang="ko">
+
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+
+        <!-- Bootstrap CSS
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+              integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+              crossorigin="anonymous">
+        -->
+
+        <!-- CSS -->
+        <link rel="stylesheet"  href="{{url_for('static', filename='css/default.css')}}"/>
+
+        <!-- JS -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <!--
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+                integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+                crossorigin="anonymous"></script>
+        -->
+
+        <!-- 구글폰트 -->
+        <link href="https://fonts.googleapis.com/css?family=Stylish&display=swap" rel="stylesheet">
+
+        <title>J-GATI JOIN MEMBER PAGE</title>
+
+        <script>
+            function join_mem() {
+                let join_id = $('#join_id').val();
+                let join_pwd = $('#join_password').val();
+                let confirm_pwd = $('#join_password_check').val();
+                let join_email = $('#join_email').val();
+
+
+                console.log("콘솔")
+
+                $.ajax({
+                    type: "POST",
+                    url: "/api/membership",
+                    data: {id_give: join_id, pwd_give: join_pwd, confirm_pwd_give: confirm_pwd, email_give: join_email},
+                    success: function (response) { // 성공하면
+                        console.log("콘솔2")
+                        console.log(response['result'])
+
+                        if (response['result'] == 'success') {
+                            alert(response['msg']);
+                            window.location.href = "/"
+                        } else {
+                            alert(response['msg'])
+                            window.location.reload()
+                        }
+                    }
+                })
+            }
+        </script>
+
+    </head>
+
+    <body>
+        <div class="wrap">
+            <div class="main_join">
+                <div class="box_join">
+                    <h2 class="type_title02">J-GATI</h2>
+                    <div class="box_joinInput">
+                        <div class="joinInput_id">
+                            <input id="join_id" class="input_basic" placeholder="ID">
+                            <button onclick="a()" id="btn-id-chk" type="button" class="btn_basic">중복체크</button>
+                        </div>
+                        <input id="join_password" class="input_basic" placeholder="PASSWORD">
+                        <input id="join_password_check" class="input_basic" placeholder="CONFIRM PASSWORD">
+                        <input id="join_email" class="input_basic" placeholder="E-MAIL">
+                    </div>
+                    <div class="box_joinBtn">
+                        <button onclick="join_mem()" id="btn-join-submit" type="button" class="btn_basic">회원가입</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+
+</html>
